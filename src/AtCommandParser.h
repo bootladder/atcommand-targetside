@@ -10,6 +10,6 @@
 
 
 uint8_t AtCommandParser_AddCommandEntry(AtCommandHandler_t * handler);
-
 AtCommandHandler_t * AtCommandParser_ParseLine(uint8_t * line);
+void AtCommandParser_DeleteCommandHandlerTable(void);
 #endif //WRISTBAND_V2_5_FACTORYTEST_1_0_ATCOMMANDPARSER_H

@@ -34,3 +34,9 @@ AtCommandHandler_t * AtCommandParser_ParseLine(uint8_t * line){
     }
     return 0;  //NULL
 }
+
+void AtCommandParser_DeleteCommandHandlerTable(void){
+    for(int i=0; i<NUM_ATCOMMANDHANDLERS; i++){
+        atcommandhandlers[i] = 0;
+    }
+}

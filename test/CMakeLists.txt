@@ -27,6 +27,3 @@ add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
         COMMAND pwd
         )
 
-add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-        COMMAND cat /tmp/cmakesucks && rm /tmp/cmakesucks
-        )
