@@ -1,7 +1,18 @@
 #include <stdint.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include "AtCommandParser.h"
 #include "AtCommandHandler.h"
+
+
+static uint8_t * line;
+static AtCommandHandler_t * atch;
+
+#define _ASSERT_MSG(exp, msg) \
+    if(false == (exp)){ \
+    printf("FAIL: ");printf(msg);printf("\n"); \
+    return; \
+    }
 
 
 ////////////////////////////////////////////////
@@ -40,6 +51,8 @@ static void _setup_mock_commandhandlers(){
 }
 
 static void _init_testcase(void){
+    line = 0;
+    atch = 0;
     _setup_mock_commandhandlers();
     AtCommandParser_DeleteCommandHandlerTable();
 }
@@ -49,25 +62,12 @@ void testcase_commandlinewithcarriagereturn_is_valid(void) {
 
     AtCommandParser_AddCommandEntry(&atch_test_1);
 
-    uint8_t * line;
-    AtCommandHandler_t * atch;
-
     line = "AT*TEST1\r\n";
     atch = AtCommandParser_ParseLine(line);
-
-    if(0 == atch){
-        printf("FAIL\n");
-        return;
-    }
+    _ASSERT_MSG(0 != atch, "parser should not return null")
 
     uint8_t ret = AtCommandHandler_ExecuteAtCommand(atch, line);
-
-    if(0 != ret){
-        printf("FAIL\n");
-        return;
-    }
-
-
+    _ASSERT_MSG(0 == ret, "executing should pass")
 }
 
 void testcase_invalidcommandtemplate(void) {
@@ -75,94 +75,54 @@ void testcase_invalidcommandtemplate(void) {
 
     AtCommandParser_AddCommandEntry(&atch_test_1);
 
-    uint8_t * line;
-    AtCommandHandler_t * atch;
+    line = "AT*NOTACOMMAND\n";
+    atch = AtCommandParser_ParseLine(line);
+
+    _ASSERT_MSG(0 == atch, "Invalid command template should fail at ParseLine")
+}
+
+void testcase_nocommandsadded_parsingshouldfail(void) {
+    _init_testcase();
 
     line = "AT*NOTACOMMAND\n";
     atch = AtCommandParser_ParseLine(line);
 
-    if(0 != atch){
-        printf("FAIL\n");
-        return;
-    }
+    _ASSERT_MSG(0 == atch, "Parsing line with empty table should fail")
 }
 
+// THIS NEEDS WORK
+// TODO DEFINE INVALID AT COMMANDS
 void testcase_writecommand_invalidparameters_parserreturnsnull(void){
     _init_testcase();
 
     AtCommandParser_AddCommandEntry(&atch_test_1);
 
-    uint8_t * line;
-    AtCommandHandler_t * cmd;
-
-
     line = "AT*TEST1=_%@345ds--_\n";
-    cmd = AtCommandParser_ParseLine(line);
-    uint8_t ret = AtCommandHandler_ExecuteAtCommand(cmd, line);
+    atch = AtCommandParser_ParseLine(line);
+    uint8_t ret = AtCommandHandler_ExecuteAtCommand(atch, line);
 
-    if(0 != ret){
-        printf("FAIL\n");
-        return;
-    }
+//    _ASSERT_MSG(0 != ret)
 }
 
 void testcase_end2end_allhandlerfuncsdefined_allhandlerfuncscalled_assert_all_called(void){
     _init_testcase();
     AtCommandParser_AddCommandEntry(&atch_test_1);
 
-    uint8_t * line;
-    AtCommandHandler_t * cmd;
-
-
     // Send command lines
     line = "AT*TEST1?\n";
-    cmd = AtCommandParser_ParseLine(line);
-    AtCommandHandler_ExecuteAtCommand(cmd, line);
+    atch = AtCommandParser_ParseLine(line);
+    AtCommandHandler_ExecuteAtCommand(atch, line);
 
     line = "AT*TEST1=1\n";
-    cmd = AtCommandParser_ParseLine(line);
-    AtCommandHandler_ExecuteAtCommand(cmd, line);
+    atch = AtCommandParser_ParseLine(line);
+    AtCommandHandler_ExecuteAtCommand(atch, line);
 
     line = "AT*TEST1\n";
-    cmd = AtCommandParser_ParseLine(line);
-    AtCommandHandler_ExecuteAtCommand(cmd, line);
+    atch = AtCommandParser_ParseLine(line);
+    AtCommandHandler_ExecuteAtCommand(atch, line);
 
-
-    // ASSERTS
-    if(0 == test_1_write_callcount){
-        printf("FAIL");
-        return;
-    }
-    if(0 == test_1_read_callcount){
-        printf("FAIL");
-        return;
-    }
-    if(0 == test_1_command_callcount){
-        printf("FAIL");
-        return;
-    }
-
-    printf("PASS");
+    _ASSERT_MSG(test_1_write_callcount > 0, "write func should have been called")
+    _ASSERT_MSG(test_1_read_callcount > 0, "read func should have been called")
+    _ASSERT_MSG(test_1_command_callcount > 0, "command func should have been called")
 }
 
-
-void testcase_dummy_2(void){
-
-    _setup_mock_commandhandlers();
-    AtCommandParser_DeleteCommandHandlerTable();
-
-    AtCommandParser_AddCommandEntry(&atch_test_1);
-
-    uint8_t * line;
-    AtCommandHandler_t * cmd;
-    line = "AT*TEST1?\n";
-    cmd = AtCommandParser_ParseLine(line);
-    AtCommandHandler_ExecuteAtCommand(cmd, line);
-
-    line = "AT*TEST1=1\n";
-    cmd = AtCommandParser_ParseLine(line);
-    AtCommandHandler_ExecuteAtCommand(cmd, line);
-    printf("done\n");
-
-    printf("PASSk\n");
-}
