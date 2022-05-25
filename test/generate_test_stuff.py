@@ -83,7 +83,7 @@ typedef void (*testcase_t)(void);
 print(headerfiletemplate)
 
 print("Writing the generated header file to: " + pathtogeneratedheaderoutputfile)
-with open(pathtogeneratedheaderoutputfile, 'w') as outputfile:
+with open(pathtogeneratedheaderoutputfile, 'w+') as outputfile:
   outputfile.write(headerfiletemplate)
   
 print("Done")
