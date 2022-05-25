@@ -1,3 +1,4 @@
 cmake-build-debug/
 .idea/
 *.swp
+generated/gen_table_of_testcases_and_signatures.h

@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include "AtCommandParser.h"
-
 
 #include "gen_table_of_testcases_and_signatures.h"
 void main(void){
