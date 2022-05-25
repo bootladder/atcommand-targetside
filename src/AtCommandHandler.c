@@ -105,7 +105,7 @@ uint8_t AtCommandHandler_ExecuteAtCommand(AtCommandHandler_t * cmdptr, uint8_t *
 
     // Check if it's a command, ie. no ? or = or =?
     // ie. if the line ends after the command
-    if(char_after_command_template == '\n'){
+    if(char_after_command_template == '\n' || char_after_command_template == '\r'){
         return call_command_func(cmdptr);
     }
 

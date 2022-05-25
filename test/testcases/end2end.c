@@ -44,6 +44,48 @@ static void _init_testcase(void){
     AtCommandParser_DeleteCommandHandlerTable();
 }
 
+void testcase_commandlinewithcarriagereturn_is_valid(void) {
+    _init_testcase();
+
+    AtCommandParser_AddCommandEntry(&atch_test_1);
+
+    uint8_t * line;
+    AtCommandHandler_t * atch;
+
+    line = "AT*TEST1\r\n";
+    atch = AtCommandParser_ParseLine(line);
+
+    if(0 == atch){
+        printf("FAIL\n");
+        return;
+    }
+
+    uint8_t ret = AtCommandHandler_ExecuteAtCommand(atch, line);
+
+    if(0 != ret){
+        printf("FAIL\n");
+        return;
+    }
+
+
+}
+
+void testcase_invalidcommandtemplate(void) {
+    _init_testcase();
+
+    AtCommandParser_AddCommandEntry(&atch_test_1);
+
+    uint8_t * line;
+    AtCommandHandler_t * atch;
+
+    line = "AT*NOTACOMMAND\n";
+    atch = AtCommandParser_ParseLine(line);
+
+    if(0 != atch){
+        printf("FAIL\n");
+        return;
+    }
+}
 
 void testcase_writecommand_invalidparameters_parserreturnsnull(void){
     _init_testcase();
@@ -58,11 +100,10 @@ void testcase_writecommand_invalidparameters_parserreturnsnull(void){
     cmd = AtCommandParser_ParseLine(line);
     uint8_t ret = AtCommandHandler_ExecuteAtCommand(cmd, line);
 
-    if(1 != ret){
+    if(0 != ret){
         printf("FAIL\n");
         return;
     }
-
 }
 
 void testcase_end2end_allhandlerfuncsdefined_allhandlerfuncscalled_assert_all_called(void){

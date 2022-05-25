@@ -24,6 +24,12 @@ AtCommandHandler_t * AtCommandParser_ParseLine(uint8_t * line){
 
     // SCAN FOR A MATCH
     for(int i=0; i<NUM_ATCOMMANDHANDLERS; i++) {
+
+        // skip null entries
+        if(atcommandhandlers[i] == 0){
+            continue;
+        }
+
         if (0 == strncmp(
                 atcommandhandlers[i]->command_template,
                 line,
