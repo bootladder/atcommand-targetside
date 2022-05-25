@@ -46,7 +46,7 @@ void testcase_dummy_1(void){
     AtCommandHandler_ExecuteAtCommand(cmd, line);
     printf("done\n");
 
-    printf("PASS\n");
+    printf("PASSk\n");
 }
 
 
@@ -79,4 +79,26 @@ void testcase_end2end_allhandlerfuncsdefined_allhandlerfuncscalled(void){
     }
 
     printf("PASS");
+}
+
+
+void testcase_dummy_2(void){
+
+    _setup_mock_commandhandlers();
+    AtCommandParser_DeleteCommandHandlerTable();
+
+    AtCommandParser_AddCommandEntry(&atch_test_1);
+
+    uint8_t * line;
+    AtCommandHandler_t * cmd;
+    line = "AT*TEST1?\n";
+    cmd = AtCommandParser_ParseLine(line);
+    AtCommandHandler_ExecuteAtCommand(cmd, line);
+
+    line = "AT*TEST1=1\n";
+    cmd = AtCommandParser_ParseLine(line);
+    AtCommandHandler_ExecuteAtCommand(cmd, line);
+    printf("done\n");
+
+    printf("PASSk\n");
 }
