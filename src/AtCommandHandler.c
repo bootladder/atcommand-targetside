@@ -4,10 +4,10 @@
 #include "AtCommandIOInterface.h"
 
 static uint8_t call_read_func(AtCommandHandler_t * cmdptr){
-    log_debug_stringln("ITS A READ");
+    at_command_log_debug_stringln("ITS A READ");
 
     if(0 == cmdptr->read_func){
-        log_debug_stringln("NO READ FUNCTION DEFINED. EXIT");
+        at_command_log_debug_stringln("NO READ FUNCTION DEFINED. EXIT");
         return 22;
     }
 
@@ -19,7 +19,7 @@ static uint8_t call_write_func(AtCommandHandler_t * cmdptr, uint8_t * line){
     uint8_t * commandtemplate = cmdptr->command_template;
     uint8_t len_of_cmd_tmpl = strlen((const char*)commandtemplate);
 
-    log_debug_stringln("ITS A WRITE");
+    at_command_log_debug_stringln("ITS A WRITE");
 
     if(0 == cmdptr->write_func){
         log_debug_stringln("NO WRITE FUNCTION DEFINED. EXIT");
@@ -50,10 +50,10 @@ static uint8_t call_write_func(AtCommandHandler_t * cmdptr, uint8_t * line){
 }
 
 static uint8_t call_command_func(AtCommandHandler_t * cmdptr){
-    log_debug_stringln("ITS A COMMAND");
+    at_command_log_debug_stringln("ITS A COMMAND");
 
     if(0 == cmdptr->command_func){
-        log_debug_stringln("NO COMMAND FUNCTION DEFINED. EXIT");
+        at_command_log_debug_stringln("NO COMMAND FUNCTION DEFINED. EXIT");
         return 21;
     }
 
@@ -64,15 +64,15 @@ static uint8_t call_command_func(AtCommandHandler_t * cmdptr){
 
 static uint8_t handle_test_command(AtCommandHandler_t *cmdptr) {
     if(cmdptr->command_description == 0){
-        log_debug_stringln("NO DESCRIPTION SPECIFIED FOR THIS COMMAND");
+        at_command_log_debug_stringln("NO DESCRIPTION SPECIFIED FOR THIS COMMAND");
     }
-    log_debug_stringln(cmdptr->command_description);
+    at_command_log_debug_stringln(cmdptr->command_description);
     return 0;
 }
 
 uint8_t AtCommandHandler_ExecuteAtCommand(AtCommandHandler_t * cmdptr, uint8_t * line)
 {
-    log_debug_stringln("AtCommandHandler_ExecuteAtCommand");
+    at_command_log_debug_stringln("AtCommandHandler_ExecuteAtCommand");
 
     // Local variables for convenience
     uint8_t * commandtemplate = cmdptr->command_template;
@@ -108,6 +108,6 @@ uint8_t AtCommandHandler_ExecuteAtCommand(AtCommandHandler_t * cmdptr, uint8_t *
     }
 
 
-    log_debug_stringln("SOMETHING WRONG HAPPENDE BAD AT COMMAND");
+    at_command_log_debug_stringln("SOMETHING WRONG HAPPENDE BAD AT COMMAND");
     return 1;
 }
