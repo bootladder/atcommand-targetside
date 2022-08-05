@@ -1,0 +1,8 @@
+#ifndef WRISTBAND_V25_BOOTLOADER_COMMANDLINEPROTOCOL_H
+#define WRISTBAND_V25_BOOTLOADER_COMMANDLINEPROTOCOL_H
+
+#include <stdint.h>
+void commandlineprotocol_processLine(uint8_t * line);
+
+
+#endif //WRISTBAND_V25_BOOTLOADER_COMMANDLINEPROTOCOL_H
