@@ -1,9 +1,9 @@
-#include "commandlineprotocol.h"
+#include "AtCommandProcessLine.h"
 
 #include <string.h>
-#include "printing_help.h"
+#include "AtCommandIOInterface.h"
 #include "AtCommandParser.h"
-#include "prepare_help_message.h"
+#include "AtCommandHelpMessage.h"
 
 
 static uint32_t number_of_commands_processed = 0;  // for debugging
@@ -17,9 +17,9 @@ void commandlineprotocol_processLine(uint8_t * line){
 
     ////////////////////////////////////////////////
     if(0 == strncmp(line, "help", 4)){
-        uint8_t * helpmsg = prepare_help_message();
-        PRINT_STRING("Helzzzzsszp!\n")
-        printbuf_until_zero(helpmsg);
+        uint8_t * helpmsg = AtCommandHelpMessage_Get();
+        log_debug_stringln("Helzzzzsszp!\n");
+        log_debug_stringln(helpmsg);
     }
 
 
@@ -35,9 +35,9 @@ void commandlineprotocol_processLine(uint8_t * line){
 
         uint8_t result = AtCommandHandler_ExecuteAtCommand(cmdptr, line);
         if(result == 0){
-            PRINT_STRING("OK\n")
+            log_debug_stringln("OK\n");
         } else {
-            PRINT_STRING("FAIL\n")
+            log_debug_stringln("FAIL\n");
         }
     }
 

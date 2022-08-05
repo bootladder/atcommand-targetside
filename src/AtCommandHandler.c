@@ -1,9 +1,7 @@
-//
-// Created by steve on 4/27/22.
-//
+
 #include <memory.h>
 #include "AtCommandHandler.h"
-#include "printing_help.h"
+#include "AtCommandIOInterface.h"
 
 static uint8_t call_read_func(AtCommandHandler_t * cmdptr){
     log_debug_stringln("ITS A READ");
@@ -68,7 +66,7 @@ static uint8_t handle_test_command(AtCommandHandler_t *cmdptr) {
     if(cmdptr->command_description == 0){
         log_debug_stringln("NO DESCRIPTION SPECIFIED FOR THIS COMMAND");
     }
-    printbuf_until_newline_or_zero(cmdptr->command_description);
+    log_debug_stringln(cmdptr->command_description);
     return 0;
 }
 
