@@ -1,7 +1,3 @@
-//
-// Created by steve on 4/27/22.
-//
-
 #include <memory.h>
 #include "AtCommandParser.h"
 
